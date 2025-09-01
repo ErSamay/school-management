@@ -191,7 +191,7 @@ export default function ShowSchools() {
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-full mr-2"></div>
                 <span className="text-gray-600">
-                  Searching for "{searchTerm}"
+                  Searching for &quot;{searchTerm}&quot;
                 </span>
               </div>
             )}
@@ -212,7 +212,7 @@ export default function ShowSchools() {
                     </svg>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">No Results Found</h3>
-                  <p className="text-gray-600 text-lg mb-6">No schools match your search for "{searchTerm}"</p>
+                  <p className="text-gray-600 text-lg mb-6">No schools match your search for &quot;{searchTerm}&quot;</p>
                   <button
                     onClick={clearSearch}
                     className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 transition duration-300 transform hover:scale-105 shadow-lg"

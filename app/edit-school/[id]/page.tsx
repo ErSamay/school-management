@@ -19,6 +19,7 @@ const schema = yup.object().shape({
   email_id: yup.string()
     .email('Invalid email format')
     .required('Email is required'),
+  image: yup.mixed<FileList>().required('School image is required')
 });
 
 interface School {
@@ -44,7 +45,6 @@ export default function EditSchool() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setValue
   } = useForm({
     resolver: yupResolver(schema)
@@ -54,6 +54,7 @@ export default function EditSchool() {
     if (params.id) {
       fetchSchool();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
   const fetchSchool = async () => {
@@ -79,7 +80,7 @@ export default function EditSchool() {
       setLoading(false);
     }
   };
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
     setIsSubmitting(true);
     setSubmitMessage('');
@@ -110,6 +111,7 @@ export default function EditSchool() {
         setSubmitMessage('Error: ' + result.message);
       }
     } catch (error) {
+      console.log(error)
       setSubmitMessage('Network error occurred');
     } finally {
       setIsSubmitting(false);
@@ -170,7 +172,7 @@ export default function EditSchool() {
               <input
                 {...register('name')}
                 type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full text-gray-900 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter school name"
               />
               {errors.name && (
@@ -186,7 +188,7 @@ export default function EditSchool() {
               <textarea
                 {...register('address')}
                 rows={3}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Enter complete address"
               />
               {errors.address && (
@@ -203,7 +205,7 @@ export default function EditSchool() {
                 <input
                   {...register('city')}
                   type="text"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter city"
                 />
                 {errors.city && (
@@ -218,7 +220,7 @@ export default function EditSchool() {
                 <input
                   {...register('state')}
                   type="text"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter state"
                 />
                 {errors.state && (
@@ -236,7 +238,7 @@ export default function EditSchool() {
                 <input
                   {...register('contact')}
                   type="tel"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter 10-digit number"
                 />
                 {errors.contact && (
@@ -251,7 +253,7 @@ export default function EditSchool() {
                 <input
                   {...register('email_id')}
                   type="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Enter email address"
                 />
                 {errors.email_id && (
@@ -269,7 +271,7 @@ export default function EditSchool() {
                 {...register('image')}
                 type="file"
                 accept="image/*"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               />
               <p className="mt-1 text-sm text-gray-500">Leave empty to keep current image</p>
             </div>

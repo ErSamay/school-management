@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import connection, { initializeDatabase } from '@/lib/db';
 import { promises as fs } from 'fs';
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import { ResultSetHeader, RowDataPacket, FieldPacket } from 'mysql2';
 
 let isInitialized = false;
 
@@ -16,7 +16,7 @@ async function ensureInitialized(): Promise<void> {
 export async function GET() {
   try {
     await ensureInitialized();
-    const [rows] = await connection.execute('SELECT * FROM schools ORDER BY id DESC') as [RowDataPacket[], any];
+    const [rows] = await connection.execute('SELECT * FROM schools ORDER BY id DESC') as [RowDataPacket[], FieldPacket[]];
     
     return NextResponse.json({ 
       success: true, 
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     const [result] = await connection.execute(
       'INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
       [schoolData.name, schoolData.address, schoolData.city, schoolData.state, schoolData.contact, imagePath, schoolData.email_id]
-    ) as [ResultSetHeader, any];
+    ) as [ResultSetHeader, FieldPacket[]];
 
     return NextResponse.json({ 
       success: true, 
@@ -99,7 +99,7 @@ export async function DELETE(request: NextRequest) {
     const [schools] = await connection.execute(
       'SELECT image FROM schools WHERE id = ?',
       [id]
-    ) as [RowDataPacket[], any];
+    ) as [RowDataPacket[], FieldPacket[]];
 
     if (schools.length > 0 && schools[0].image) {
       try {
@@ -112,7 +112,7 @@ export async function DELETE(request: NextRequest) {
     const [result] = await connection.execute(
       'DELETE FROM schools WHERE id = ?',
       [id]
-    ) as [ResultSetHeader, any];
+    ) as [ResultSetHeader, FieldPacket[]];
 
     if (result.affectedRows === 0) {
       return NextResponse.json(

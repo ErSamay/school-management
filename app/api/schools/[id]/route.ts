@@ -27,14 +27,17 @@ async function ensureInitialized(): Promise<void> {
 // GET - Fetch single school
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await ensureInitialized();
     
+    // Await the params before accessing properties
+    const { id } = await params;
+    
     const [rows]: [School[], FieldPacket[]] = await connection.execute(
       'SELECT * FROM schools WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     if (rows.length === 0) {
@@ -61,10 +64,14 @@ export async function GET(
 // PUT - Update school
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await ensureInitialized();
+    
+    // Await the params before accessing properties
+    const { id } = await params;
+    
     const formData = await request.formData();
     
     const schoolData = {
@@ -92,7 +99,7 @@ export async function PUT(
       // Delete old image
       const [oldSchool]: [School[], FieldPacket[]] = await connection.execute(
         'SELECT image FROM schools WHERE id = ?',
-        [params.id]
+        [id]
       );
 
       if (oldSchool.length > 0 && oldSchool[0].image) {
@@ -123,7 +130,7 @@ export async function PUT(
     if (imagePath) {
       values.push(imagePath);
     }
-    values.push(params.id);
+    values.push(id);
 
     const [result]: [ResultSetHeader, FieldPacket[]] = await connection.execute(updateQuery, values);
 

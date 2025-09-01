@@ -29,7 +29,7 @@ const schema = yup.object().shape({
   email_id: yup.string()
     .email('Invalid email format')
     .required('Email is required'),
-  image: yup.mixed().required('School image is required')
+  image: yup.mixed<FileList>().required('School image is required')
 });
 
 export default function AddSchool() {
